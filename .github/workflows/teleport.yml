@@ -4,6 +4,12 @@ on:
   push:
     branches:
     - main
+
+env:
+  SERVER: mail.minepos.net
+  DOMAIN: testnodejs.aubury.me
+  USER_TSH: myrthe.dullaart
+
 jobs:
   demo:
     permissions:
@@ -25,9 +31,10 @@ jobs:
         proxy: teleport.andrewa.co.uk:443
         token: github_md-bot
         certificate-ttl: 1h
-    - name: List nodes (tsh)
-      run: tsh ls
-    - name: List nodes (tctl)
-      run: tctl nodes ls
-    - name: Run hostname via SSH (tsh)
-      run: tsh ssh myrthe.dullaart@mail.minepos.net hostname
+    - name: Stop project running (PM2)
+      run: tsh ssh $USER_TSH@$SERVER "pm2 stop $DOMAIN  || :"
+    - name: Deploy code to server
+      run: tsh scp -r * $USER_TSH@$SERVER:/home/$USER_TSH/web/$DOMAIN/public_html
+    - name: Start project running (PM2)
+      run: tsh ssh $USER_TSH@$SERVER "cd /home/$USER_TSH/web/$DOMAIN/public_html; pm2 start --name $DOMAIN index.js"
+
