@@ -37,4 +37,6 @@ jobs:
       run: tsh scp -r * $USER_TSH@$SERVER:/home/$USER_TSH/web/$DOMAIN/public_html
     - name: Start project running (PM2)
       run: tsh ssh $USER_TSH@$SERVER "cd /home/$USER_TSH/web/$DOMAIN/public_html; pm2 start --name $DOMAIN index.js"
+    - name: Ensure Socket perms
+      run: tsh ssh $USER_TSH@$SERVER "sleep 1; cd /home/$USER_TSH/web/$DOMAIN/; chmod 666 server.socket"
 
