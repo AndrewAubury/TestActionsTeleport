@@ -22,7 +22,7 @@ jobs:
       id: auth
       uses: teleport-actions/auth@v2
       with:
-        proxy: https://teleport.andrewa.co.uk/
+        proxy: teleport.andrewa.co.uk:443
         token: github_md
         certificate-ttl: 1h
     - name: List nodes (tsh)
